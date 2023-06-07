@@ -148,13 +148,13 @@ class Item {
   String opcionSeleccionada;
 
   Item({
-    required this.nombre,
-    required this.semestre,
-    required this.grupo,
-    required this.carrera,
-    required this.turno,
-    required this.fechaInicio,
-    required this.fechaFinal,
-    required this.opcionSeleccionada,
+    this.nombre,
+    this.semestre,
+    this.grupo,
+    this.carrera,
+    this.turno,
+    this.fechaInicio,
+    this.fechaFinal,
+    this.opcionSeleccionada,
   });
 }

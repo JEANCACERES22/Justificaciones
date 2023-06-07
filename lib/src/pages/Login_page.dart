@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:justificaciones/src/pages/Home_page.dart';
+import 'package:justificaciones/src/pages/home_page.dart';
 import 'package:justificaciones/src/pages/newmail.dart';
 
 class LoginPage extends StatefulWidget {
@@ -103,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => MyHomePage()),
+                                builder: (context) => HomePage()),
                           );
                         },
                         child: Text('Iniciar'),

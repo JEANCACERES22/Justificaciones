@@ -54,7 +54,7 @@ class _RegistroPageState extends State<RegistroPage> {
                       value: _esMatutino,
                       onChanged: (value) {
                         setState(() {
-                          _esMatutino = value!;
+                          _esMatutino = value;
                         });
                       },
                     ),
@@ -67,7 +67,7 @@ class _RegistroPageState extends State<RegistroPage> {
                       value: _esVespertino,
                       onChanged: (value) {
                         setState(() {
-                          _esVespertino = value!;
+                          _esVespertino = value;
                         });
                       },
                     ),
