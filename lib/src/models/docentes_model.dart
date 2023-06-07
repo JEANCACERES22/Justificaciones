@@ -13,11 +13,11 @@ class DocentesModel {
   String turno;
 
   DocentesModel({
-    required this.nombre,
-    required this.asignatura,
-    required this.grupos,
-    required this.contacto,
-    required this.turno
+    this.nombre,
+    this.asignatura,
+    this.grupos,
+    this.contacto,
+    this.turno
   });
 
   factory DocentesModel.fromJson(Map<String, dynamic> json) => new DocentesModel(

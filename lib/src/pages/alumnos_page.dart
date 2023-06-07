@@ -1,123 +1,216 @@
 import 'package:flutter/material.dart';
+import 'package:justificaciones/src/bloc/alumnos_bloc.dart';
+import 'package:justificaciones/src/bloc/provider.dart';
+import 'package:justificaciones/src/models/alumnos_models.dart';
 
-class RegistroAlumnoPage extends StatelessWidget {
-  final TextEditingController nombreController = TextEditingController();
-  final TextEditingController semestreController = TextEditingController();
-  final TextEditingController aulaController = TextEditingController();
-  final TextEditingController carreraController = TextEditingController();
+import 'package:justificaciones/src/utils/utils.dart' as utils;
 
-  bool isMatutino = false;
-  bool isVespertino = false;
+class AlumnoPage extends StatefulWidget {
+  @override
+  State<AlumnoPage> createState() => _AlumnoPageState();
+}
 
+class _AlumnoPageState extends State<AlumnoPage> {
+  final formKey = GlobalKey<FormState>();
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  AlumnosBloc alumnosBloc;
+  AlumnoModel alumno = new AlumnoModel();
+  bool _guardando = false;
+
+  List<String> _turno = ["Matutino", "Vespertino"];
+  String _selectedTurno = "Matutino";
+  
   @override
   Widget build(BuildContext context) {
+    alumnosBloc = Provider.alumnosBloc(context);
+
+    final alumData = ModalRoute.of(context).settings.arguments;
+    if (alumData != null) {
+      alumno = alumData as AlumnoModel;
+    }
+
     return Scaffold(
+      key: scaffoldKey,
       appBar: AppBar(
+        title: Text('Registrar alumnos'),
         backgroundColor: Color.fromRGBO(128, 0, 0, 1.0),
-        title: Text('Registro de Alumnos'),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16),
-        child: Card(
-          elevation: 4,
-          child: Padding(
-            padding: EdgeInsets.all(16),
-            child: Column(
-              children: [
-                TextField(
-                  controller: nombreController,
-                  decoration: InputDecoration(labelText: 'Nombre'),
-                ),
-                TextField(
-                  controller: semestreController,
-                  decoration: InputDecoration(labelText: 'Semestre'),
-                ),
-                TextField(
-                  controller: aulaController,
-                  decoration: InputDecoration(labelText: 'Aula'),
-                ),
-                TextField(
-                  controller: carreraController,
-                  decoration: InputDecoration(labelText: 'Carrera'),
-                ),
-                ExpansionTile(
-                  title: Text('Grupos'),
-                  children: [
-                    ListTile(
-                      title: Text('Grupo A'),
-                      onTap: () {
-                        print('grupo A');
-                      },
-                    ),
-                    ListTile(
-                      title: Text('Grupo B'),
-                      onTap: () {
-                        print('grupo B');
-                      },
-                    ),
-                    ListTile(
-                      title: Text('Grupo c'),
-                      onTap: () {
-                        print('grupo C');
-                      },
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Checkbox(
-                      value: isMatutino,
-                      onChanged: (value) {
-                        isMatutino = value!;
-                      },
-                    ),
-                    Text('Matutino'),
-                    Checkbox(
-                      value: isVespertino,
-                      onChanged: (value) {
-                        isVespertino = value!;
-                      },
-                    ),
-                    Text('Vespertino'),
-                  ],
-                ),
-                SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    // Acción al hacer clic en "Registrar"
-                    String nombre = nombreController.text;
-                    String semestre = semestreController.text;
-                    String aula = aulaController.text;
-                    String carrera = carreraController.text;
-
-                    String turno = '';
-                    if (isMatutino && isVespertino) {
-                      turno = 'Matutino y Vespertino';
-                    } else if (isMatutino) {
-                      turno = 'Matutino';
-                    } else if (isVespertino) {
-                      turno = 'Vespertino';
-                    }
-
-                    print('Nombre: $nombre');
-                    print('Semestre: $semestre');
-                    print('Aula: $aula');
-                    print('Carrera: $carrera');
-                    print('Turno: $turno');
-                  },
-                  child: Text(
-                    'Registrar',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.redAccent,
-                  ),
-                ),
-              ],
-            ),
-          ),
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.all(15.0),
+          child: Form(
+              key: formKey,
+              child: Column(
+                children: <Widget>[
+                  _crearNumcontrol(),
+                  _crearNombre(),
+                  _crearAula(),
+                  _crearSemestre(),
+                  _crearCarrera(),
+                  _crearTurno(),
+                  _crearGrupo(),
+                  _crearBoton()
+                ],
+              )),
         ),
       ),
     );
   }
+
+  Widget _crearNumcontrol() {
+    return TextFormField(
+      initialValue: alumno.numcontrol.toString(),
+      keyboardType: TextInputType.numberWithOptions(),
+      decoration: InputDecoration(labelText: 'Numero de control'),
+      onSaved: (value) => alumno.numcontrol = int.parse(value),
+      validator: (value) {
+        if (utils.isNumeric(value)) {
+          return null;
+        } else {
+          return 'Sólo números';
+        }
+      },
+    );
+  }
+
+  Widget _crearNombre() {
+    return TextFormField(
+      initialValue: alumno.nombre,
+      textCapitalization: TextCapitalization.sentences,
+      decoration: InputDecoration(labelText: 'Nombre'),
+      onSaved: (value) => alumno.nombre = value,
+      validator: (value) {
+        if (value.length < 3) {
+          return 'Ingresa el nombre del alumno';
+        } else {
+          return null;
+        }
+      },
+    );
+  }
+
+  Widget _crearAula() {
+    return TextFormField(
+      initialValue: alumno.aula.toString(),
+      keyboardType: TextInputType.numberWithOptions(),
+      decoration: InputDecoration(labelText: 'Aula'),
+      onSaved: (value) => alumno.aula = int.parse(value),
+      validator: (value) {
+        if (utils.isNumeric(value)) {
+          return null;
+        } else {
+          return 'Sólo números';
+        }
+      },
+    );
+  }
+
+  Widget _crearSemestre() {
+    return TextFormField(
+      initialValue: alumno.semestre,
+      textCapitalization: TextCapitalization.sentences,
+      decoration: InputDecoration(labelText: 'Semestre'),
+      onSaved: (value) => alumno.semestre = value,
+      validator: (value) {
+        if (value.length < 3) {
+          return 'Ingresa el semestre';
+        } else {
+          return null;
+        }
+      },
+    );
+  }
+
+  Widget _crearCarrera() {
+    return TextFormField(
+      initialValue: alumno.carrera,
+      textCapitalization: TextCapitalization.sentences,
+      decoration: InputDecoration(labelText: 'Carrera'),
+      onSaved: (value) => alumno.carrera = value,
+      validator: (value) {
+        if (value.length < 3) {
+          return 'Ingresa la carrera';
+        } else {
+          return null;
+        }
+      },
+    );
+  }
+
+  Widget _crearTurno() {
+    return Column(
+      children: [
+        Padding(padding: EdgeInsets.only(top: 15.0)),
+        Text("Turno"),
+        for(int i = 0; i < _turno.length; i++) 
+        Row(
+          children: [
+            Radio(
+              value: _turno[i], 
+              groupValue: _selectedTurno, 
+              onChanged: (value) {
+                setState(() {
+                  _selectedTurno = value.toString();
+                });
+              }),
+              Text(_turno[i]),
+          ],
+        )
+      ],
+    );
+  }
+
+  Widget _crearGrupo() {
+    return TextFormField(
+      initialValue: alumno.grupo,
+      decoration: InputDecoration(labelText: 'Grupo'),
+      onSaved: (value) => alumno.grupo = value,
+      validator: (value) {
+        if (value.length < 2) {
+          return 'Ingresa el grupo';
+        } else {
+          return null;
+        }
+      },
+    );
+  }
+
+  Widget _crearBoton() {
+    return ElevatedButton.icon(
+      label: Text('Guardar'),
+      icon: Icon(Icons.save, color: Colors.white),
+      style: ElevatedButton.styleFrom(
+          textStyle: TextStyle(color: Colors.white),
+          primary: Color.fromRGBO(128, 0, 0, 1.0),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0))),
+      onPressed: (_guardando) ? null : _submit,
+    );
+  }
+
+  void _submit() async {
+    if (!formKey.currentState.validate()) return;
+
+    formKey.currentState.save();
+
+    setState(() {
+      
+    });
+
+    // setState(() {_guardando = false;});
+    mostrarSnackbar('Registro guardado');
+
+    Navigator.pop(context);
+  }
+
+  void mostrarSnackbar(String mensaje) {
+    final snackbar = SnackBar(
+      content: Text(mensaje),
+      duration: Duration(milliseconds: 1500),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+  }
+
 }
