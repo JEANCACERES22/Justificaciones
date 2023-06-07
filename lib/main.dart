@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:justificaciones/src/bloc/provider.dart';
 import 'package:justificaciones/src/pages/Login_page.dart';
 import 'package:justificaciones/src/pages/alumnos_page.dart';
+import 'package:justificaciones/src/pages/home_page.dart';
+import 'package:justificaciones/src/pages/registro_page.dart';
 import 'package:justificaciones/src/preferencias_usuario/preferencias_usuario.dart';
 
 void main() async {
@@ -29,8 +31,8 @@ class MyApp extends StatelessWidget {
         initialRoute: 'login',
         routes: {
           'login': (BuildContext context) => LoginPage(),
-          // 'registro': (BuildContext context) => RegistroPage(),
-          // 'home': (BuildContext context) => HomePage(),
+          'registro': (BuildContext context) => RegistroPage(),
+          'home': (BuildContext context) => HomePage(),
           'alumno': (BuildContext context) => AlumnoPage(),
         },
         theme: ThemeData(
