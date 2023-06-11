@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:justificaciones/src/bloc/alumnos_bloc.dart';
+import 'package:justificaciones/src/bloc/docentes_bloc.dart';
 import 'package:justificaciones/src/bloc/login_bloc.dart';
 // import 'package:justificaciones/src/bloc/login_bloc.dart';
 
@@ -8,7 +9,7 @@ class Provider extends InheritedWidget {
 
   final loginBloc = new LoginBloc();
   final _alumnosBloc = new AlumnosBloc();
-
+  final _docentesBloc = new DocentesBloc();
 
   static Provider _instancia;
 
@@ -42,5 +43,9 @@ class Provider extends InheritedWidget {
   static AlumnosBloc alumnosBloc ( BuildContext context ) {
     return ( context.dependOnInheritedWidgetOfExactType<Provider>() )._alumnosBloc;
   }
+
+  static DocentesBloc docentesBloc ( BuildContext context ) {
+    return ( context.dependOnInheritedWidgetOfExactType<Provider>() )._docentesBloc;
+  } 
 
 }

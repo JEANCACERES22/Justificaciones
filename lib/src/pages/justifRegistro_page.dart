@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:justificaciones/src/widgets/menu_widget.dart';
 
-class MyHomePage2 extends StatefulWidget {
+class JustificacionesPage extends StatefulWidget {
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _JustificacionesPageState createState() => _JustificacionesPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage2> {
+class _JustificacionesPageState extends State<JustificacionesPage> {
   List<String> informationList = [];
 
   void _addInformation(String information) {
@@ -50,6 +51,7 @@ class _MyHomePageState extends State<MyHomePage2> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: Menu(),
       appBar: AppBar(
         backgroundColor: Color.fromRGBO(128, 0, 0, 1.0),
         title: Text('Registro de justificaciones'),

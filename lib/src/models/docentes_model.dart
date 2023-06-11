@@ -1,29 +1,29 @@
 import 'dart:convert';
 
-DocentesModel alumnoModelFromJson(String str) =>
+DocentesModel docenteModelFromJson(String str) =>
     DocentesModel.fromJson(json.decode(str));
 
-String alumnoModelToJson(DocentesModel data) => json.encode(data.toJson());
+String docenteModelToJson(DocentesModel data) => json.encode(data.toJson());
 
 class DocentesModel {
+  String id;
   String nombre;
   String asignatura;
-  String grupos;
   String contacto;
   String turno;
 
   DocentesModel({
-    this.nombre,
-    this.asignatura,
-    this.grupos,
-    this.contacto,
+    this.id,
+    this.nombre = '',
+    this.asignatura = '',
+    this.contacto = '',
     this.turno
   });
 
   factory DocentesModel.fromJson(Map<String, dynamic> json) => new DocentesModel(
+    id: json["id"],
     nombre: json["nombre"], 
     asignatura: json["asignatura"], 
-    grupos: json["grupos"], 
     contacto: json["contacto"], 
     turno: json["turno"], 
   );
@@ -31,7 +31,6 @@ class DocentesModel {
   Map<String, dynamic> toJson() => {
     "nombre" : nombre,
     "asignatura" : asignatura,
-    "grupos" : grupos,
     "contacto" : contacto,
     "turno" : turno
   };

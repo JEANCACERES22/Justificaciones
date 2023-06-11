@@ -66,8 +66,6 @@ class AlumnosProvider {
 
     });
 
-    // print( productos[0].id );
-
     return alumnos;
 
   }
