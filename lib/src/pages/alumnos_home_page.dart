@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:justificaciones/src/bloc/alumnos_bloc.dart';
 import 'package:justificaciones/src/bloc/provider.dart';
 import 'package:justificaciones/src/models/alumnos_models.dart';
-import 'package:justificaciones/widgets/menu_widget.dart';
+import 'package:justificaciones/src/widgets/menu_widget.dart';
 
 
 class AlumnosHomePage extends StatelessWidget {
@@ -18,7 +18,7 @@ class AlumnosHomePage extends StatelessWidget {
     return Scaffold(
       drawer: Menu(),
       appBar: AppBar(
-        title: Text('Home'),
+        title: Text('Alumnos'),
         backgroundColor: Color.fromRGBO(128, 0, 0, 1.0),
       ),
       body: _crearListado(alumnosBloc),
@@ -60,7 +60,10 @@ class AlumnosHomePage extends StatelessWidget {
         child: Column(
           children: <Widget>[
             ListTile(
-              title: Text('${ alumno.numcontrol } -${ alumno.nombre } - ${ alumno.carrera } - ${ alumno.semestre }'),
+              title: 
+              Text('${ alumno.numcontrol } - ${ alumno.nombre }'
+              '${ alumno.carrera } - ${ alumno.semestre }'
+              '${ alumno.aula } - ${ alumno.grupo } - ${ alumno.turno } '),
               subtitle: Text( alumno.id ),
               onTap: () => Navigator.pushNamed(context, 'alumno', arguments: alumno ),
             ),

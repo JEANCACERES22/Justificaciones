@@ -23,17 +23,17 @@ class AlumnoModel {
     this.carrera = '',
     this.turno,
     this.aula = 0,
-    this.numcontrol = 000
+    this.numcontrol = 0
   });
 
   factory AlumnoModel.fromJson(Map<String, dynamic> json) => new AlumnoModel(
-    id         : json["id"],
-    nombre: json["nombre"], 
-    semestre: json["semestre"], 
-    grupo: json["grupo"], 
-    carrera: json["carrera"], 
-    turno: json["turno"], 
-    aula: json["aula"], 
+    id        : json["id"],
+    nombre    : json["nombre"], 
+    semestre  : json["semestre"], 
+    grupo     : json["grupo"], 
+    carrera   : json["carrera"], 
+    turno     : json["turno"], 
+    aula      : json["aula"], 
     numcontrol: json["numcontrol"]
   );
 

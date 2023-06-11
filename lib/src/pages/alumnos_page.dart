@@ -62,14 +62,18 @@ class _AlumnoPageState extends State<AlumnoPage> {
     return TextFormField(
       initialValue: alumno.numcontrol.toString(),
       keyboardType: TextInputType.numberWithOptions(),
-      decoration: InputDecoration(labelText: 'Numero de control'),
+      decoration: InputDecoration(
+        labelText: 'Numero de control'
+      ),
       onSaved: (value) => alumno.numcontrol = int.parse(value),
       validator: (value) {
-        if (utils.isNumeric(value)) {
+        
+        if ( utils.isNumeric(value) ) {
           return null;
         } else {
           return 'Sólo números';
         }
+
       },
     );
   }
@@ -90,18 +94,22 @@ class _AlumnoPageState extends State<AlumnoPage> {
     );
   }
 
-  Widget _crearAula() {
+   Widget _crearAula() {
     return TextFormField(
       initialValue: alumno.aula.toString(),
       keyboardType: TextInputType.numberWithOptions(),
-      decoration: InputDecoration(labelText: 'Aula'),
+      decoration: InputDecoration(
+        labelText: 'Aula'
+      ),
       onSaved: (value) => alumno.aula = int.parse(value),
       validator: (value) {
-        if (utils.isNumeric(value)) {
+        
+        if ( utils.isNumeric(value) ) {
           return null;
         } else {
           return 'Sólo números';
         }
+
       },
     );
   }
@@ -201,7 +209,7 @@ class _AlumnoPageState extends State<AlumnoPage> {
     // setState(() {_guardando = false;});
     mostrarSnackbar('Registro guardado');
 
-    Navigator.pop(context);
+    Navigator.pop(context, 'home_alumno');
   }
 
   void mostrarSnackbar(String mensaje) {

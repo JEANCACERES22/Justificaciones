@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:justificaciones/src/widgets/menu_widget.dart';
 
 class SearchPage extends StatefulWidget {
   @override
@@ -34,6 +35,7 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: Menu(),
       appBar: AppBar(
         backgroundColor: Color.fromRGBO(128, 0, 0, 1.0),
         title: Text(''),
