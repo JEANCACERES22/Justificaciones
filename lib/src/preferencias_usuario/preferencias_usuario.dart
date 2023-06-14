@@ -47,14 +47,5 @@ class PreferenciasUsuario {
     _prefs.setString('ultimaPagina', value);
   }
 
-  // GET Y SET del Genero
-  String get turno {
-    return _prefs.getString('turno') ?? '';
-  }
-
-  set turno (String value) {
-    _prefs.setString('turno', value);
-  }
-
 }
 

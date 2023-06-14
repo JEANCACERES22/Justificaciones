@@ -1,39 +1,39 @@
-import 'package:flutter/material.dart';
-import 'package:justificaciones/src/bloc/alumnos_bloc.dart';
-import 'package:justificaciones/src/bloc/provider.dart';
-import 'package:justificaciones/src/models/alumnos_models.dart';
+import 'dart:io';
 
+import 'package:flutter/material.dart';
+import 'package:justificaciones/src/bloc/provider.dart';
+import 'package:image_picker/image_picker.dart';
+
+import 'package:justificaciones/src/models/producto_model.dart';
 import 'package:justificaciones/src/utils/utils.dart' as utils;
 
-class AlumnoPage extends StatefulWidget {
+class ProductoPage extends StatefulWidget {
   @override
-  State<AlumnoPage> createState() => _AlumnoPageState();
+  State<ProductoPage> createState() => _ProductoPageState();
 }
 
-class _AlumnoPageState extends State<AlumnoPage> {
+class _ProductoPageState extends State<ProductoPage> {
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
-  AlumnosBloc alumnosBloc;
-  AlumnoModel alumno = new AlumnoModel();
+  ProductosBloc productosBloc;
+  ProductoModel producto = new ProductoModel();
   bool _guardando = false;
+  File foto;
 
-  List<String> _turno = ["Matutino", "Vespertino"];
-  String _selectedTurno = "Matutino";
-  
   @override
   Widget build(BuildContext context) {
-    alumnosBloc = Provider.alumnosBloc(context);
+    productosBloc = Provider.productosBloc(context);
 
-    final alumData = ModalRoute.of(context).settings.arguments;
-    if (alumData != null) {
-      alumno = alumData as AlumnoModel;
+    final prodData = ModalRoute.of(context).settings.arguments;
+    if (prodData != null) {
+      producto = prodData as ProductoModel;
     }
 
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
-        title: Text('Registrar alumnos'),
+        title: Text('Registro Alumno'),
         backgroundColor: Color.fromRGBO(128, 0, 0, 1.0),
       ),
       body: SingleChildScrollView(
@@ -43,13 +43,12 @@ class _AlumnoPageState extends State<AlumnoPage> {
               key: formKey,
               child: Column(
                 children: <Widget>[
-                  _crearNumcontrol(),
                   _crearNombre(),
                   _crearAula(),
+                  _crearNumControl(),
+                  _crearGrupo(),
                   _crearSemestre(),
                   _crearCarrera(),
-                  _crearTurno(),
-                  _crearGrupo(),
                   _crearBoton()
                 ],
               )),
@@ -58,32 +57,12 @@ class _AlumnoPageState extends State<AlumnoPage> {
     );
   }
 
-  Widget _crearNumcontrol() {
-    return TextFormField(
-      initialValue: alumno.numcontrol.toString(),
-      keyboardType: TextInputType.numberWithOptions(),
-      decoration: InputDecoration(
-        labelText: 'Numero de control'
-      ),
-      onSaved: (value) => alumno.numcontrol = int.parse(value),
-      validator: (value) {
-        
-        if ( utils.isNumeric(value) ) {
-          return null;
-        } else {
-          return 'Sólo números';
-        }
-
-      },
-    );
-  }
-
   Widget _crearNombre() {
     return TextFormField(
-      initialValue: alumno.nombre,
+      initialValue: producto.nombre,
       textCapitalization: TextCapitalization.sentences,
       decoration: InputDecoration(labelText: 'Nombre'),
-      onSaved: (value) => alumno.nombre = value,
+      onSaved: (value) => producto.nombre = value,
       validator: (value) {
         if (value.length < 3) {
           return 'Ingresa el nombre del alumno';
@@ -94,32 +73,44 @@ class _AlumnoPageState extends State<AlumnoPage> {
     );
   }
 
-   Widget _crearAula() {
+  Widget _crearAula() {
     return TextFormField(
-      initialValue: alumno.aula.toString(),
+      initialValue: producto.aula.toString(),
       keyboardType: TextInputType.numberWithOptions(),
-      decoration: InputDecoration(
-        labelText: 'Aula'
-      ),
-      onSaved: (value) => alumno.aula = int.parse(value),
+      decoration: InputDecoration(labelText: 'Aula'),
+      onSaved: (value) => producto.aula = int.parse(value),
       validator: (value) {
-        
-        if ( utils.isNumeric(value) ) {
+        if (utils.isNumeric(value)) {
           return null;
         } else {
           return 'Sólo números';
         }
+      },
+    );
+  }
 
+  Widget _crearNumControl() {
+    return TextFormField(
+      initialValue: producto.numcontrol.toString(),
+      keyboardType: TextInputType.numberWithOptions(),
+      decoration: InputDecoration(labelText: 'Numero de control'),
+      onSaved: (value) => producto.numcontrol = int.parse(value),
+      validator: (value) {
+        if (utils.isNumeric(value)) {
+          return null;
+        } else {
+          return 'Sólo números';
+        }
       },
     );
   }
 
   Widget _crearSemestre() {
     return TextFormField(
-      initialValue: alumno.semestre,
+      initialValue: producto.semestre,
       textCapitalization: TextCapitalization.sentences,
       decoration: InputDecoration(labelText: 'Semestre'),
-      onSaved: (value) => alumno.semestre = value,
+      onSaved: (value) => producto.semestre = value,
       validator: (value) {
         if (value.length < 3) {
           return 'Ingresa el semestre';
@@ -130,15 +121,15 @@ class _AlumnoPageState extends State<AlumnoPage> {
     );
   }
 
-  Widget _crearCarrera() {
+  Widget _crearGrupo() {
     return TextFormField(
-      initialValue: alumno.carrera,
+      initialValue: producto.grupo,
       textCapitalization: TextCapitalization.sentences,
-      decoration: InputDecoration(labelText: 'Carrera'),
-      onSaved: (value) => alumno.carrera = value,
+      decoration: InputDecoration(labelText: 'Grupo'),
+      onSaved: (value) => producto.grupo = value,
       validator: (value) {
-        if (value.length < 3) {
-          return 'Ingresa la carrera';
+        if (value.length < 2) {
+          return 'Ingresa el grupo';
         } else {
           return null;
         }
@@ -146,37 +137,15 @@ class _AlumnoPageState extends State<AlumnoPage> {
     );
   }
 
-  Widget _crearTurno() {
-    return Column(
-      children: [
-        Padding(padding: EdgeInsets.only(top: 15.0)),
-        Text("Turno"),
-        for(int i = 0; i < _turno.length; i++) 
-        Row(
-          children: [
-            Radio(
-              value: _turno[i], 
-              groupValue: _selectedTurno, 
-              onChanged: (value) {
-                setState(() {
-                  _selectedTurno = value.toString();
-                });
-              }),
-              Text(_turno[i]),
-          ],
-        )
-      ],
-    );
-  }
-
-  Widget _crearGrupo() {
+  Widget _crearCarrera() {
     return TextFormField(
-      initialValue: alumno.grupo,
-      decoration: InputDecoration(labelText: 'Grupo'),
-      onSaved: (value) => alumno.grupo = value,
+      initialValue: producto.carrera,
+      textCapitalization: TextCapitalization.sentences,
+      decoration: InputDecoration(labelText: 'Carrera'),
+      onSaved: (value) => producto.carrera = value,
       validator: (value) {
-        if (value.length < 2) {
-          return 'Ingresa el grupo';
+        if (value.length < 3) {
+          return 'Ingresa la carrera';
         } else {
           return null;
         }
@@ -203,13 +172,19 @@ class _AlumnoPageState extends State<AlumnoPage> {
     formKey.currentState.save();
 
     setState(() {
-      
+      _guardando = true;
     });
+
+    if (producto.id == null) {
+      productosBloc.agregarProducto(producto);
+    } else {
+      productosBloc.editarProducto(producto);
+    }
 
     // setState(() {_guardando = false;});
     mostrarSnackbar('Registro guardado');
 
-    Navigator.pop(context, 'home_alumno');
+    Navigator.pop(context);
   }
 
   void mostrarSnackbar(String mensaje) {
@@ -220,5 +195,4 @@ class _AlumnoPageState extends State<AlumnoPage> {
 
     ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
-
 }

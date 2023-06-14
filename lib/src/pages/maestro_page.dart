@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:justificaciones/src/bloc/docentes_bloc.dart';
-import 'package:justificaciones/src/bloc/provider.dart';
-import 'package:justificaciones/src/models/docentes_model.dart';
+import 'package:justificaciones/src/pages/maestro_home_page.dart';
+import 'package:justificaciones/widgets/menu_widget.dart';
 
 class DocentePage extends StatefulWidget {
   @override
@@ -12,8 +11,11 @@ class _DocentePageState extends State<DocentePage> {
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
-  DocentesBloc docentesBloc;
-  DocentesModel docente = new DocentesModel();
+  String _nombre = '';
+  String _asignatura = '';
+  String _contacto = '';
+
+  
   bool _guardando = false;
 
   List<String> _turno = ["Matutino", "Vespertino"];
@@ -21,17 +23,12 @@ class _DocentePageState extends State<DocentePage> {
   
   @override
   Widget build(BuildContext context) {
-    docentesBloc = Provider.docentesBloc(context);
-
-    final docData = ModalRoute.of(context).settings.arguments;
-    if (docData != null) {
-      docente = docData as DocentesModel;
-    }
 
     return Scaffold(
+      drawer: Menu(),
       key: scaffoldKey,
       appBar: AppBar(
-        title: Text('Registrar alumnos'),
+        title: Text('Registrar Maestros'),
         backgroundColor: Color.fromRGBO(128, 0, 0, 1.0),
       ),
       body: SingleChildScrollView(
@@ -45,7 +42,7 @@ class _DocentePageState extends State<DocentePage> {
                   _crearAsignatura(),
                   _crearContacto(),
                   _crearTurno(),
-                  // _crearGrupos(),
+                  _crearGrupos(),
                   _crearBoton()
                 ],
               )),
@@ -56,47 +53,36 @@ class _DocentePageState extends State<DocentePage> {
 
   Widget _crearNombre() {
     return TextFormField(
-      initialValue: docente.nombre,
       textCapitalization: TextCapitalization.sentences,
       decoration: InputDecoration(labelText: 'Nombre'),
-      onSaved: (value) => docente.nombre = value,
-      validator: (value) {
-        if (value.length < 3) {
-          return 'Ingresa el nombre del alumno';
-        } else {
-          return null;
-        }
+      onChanged: (value) {
+        setState(() {
+           _nombre = value;
+        });
       },
     );
   }
 
   Widget _crearAsignatura() {
     return TextFormField(
-      initialValue: docente.asignatura,
       textCapitalization: TextCapitalization.sentences,
       decoration: InputDecoration(labelText: 'Asignatura'),
-      onSaved: (value) => docente.asignatura = value,
-      validator: (value) {
-        if (value.length < 3) {
-          return 'Ingresa el semestre';
-        } else {
-          return null;
-        }
+      onChanged: (value) {
+        setState(() {
+           _asignatura = value;
+        });
       },
     );
   }
 
   Widget _crearContacto() {
     return TextFormField(
-      initialValue: docente.contacto,
+      textCapitalization: TextCapitalization.sentences,
       decoration: InputDecoration(labelText: 'Correo electrónico o Teléfono'),
-      onSaved: (value) => docente.contacto = value,
-      validator: (value) {
-        if (value.length < 3) {
-          return 'Ingresa la carrera';
-        } else {
-          return null;
-        }
+      onChanged: (value) {
+        setState(() {
+           _contacto = value;
+        });
       },
     );
   }
@@ -124,20 +110,11 @@ class _DocentePageState extends State<DocentePage> {
     );
   }
 
-  // Widget _crearGrupos() {
-  //  return TextFormField(
-  //    initialValue: alumno.grupo,
-  //    decoration: InputDecoration(labelText: 'Grupo'),
-  //    onSaved: (value) => alumno.grupo = value,
-  //    validator: (value) {
-  //      if (value.length < 2) {
-  //        return 'Ingresa el grupo';
-  //      } else {
-  //         return null;
-  //      }
-  //    },
-  //  );
-  //}
+  Widget _crearGrupos() {
+     return TextFormField(
+       decoration: InputDecoration(labelText: 'Grupos'),
+    );
+  }
 
   Widget _crearBoton() {
     return ElevatedButton.icon(
@@ -164,7 +141,10 @@ class _DocentePageState extends State<DocentePage> {
     // setState(() {_guardando = false;});
     mostrarSnackbar('Registro guardado');
 
-    Navigator.pop(context, 'home_docente');
+    Navigator.push(context, MaterialPageRoute(
+      builder: (context) => MaestrosHomePage()
+    ));
+
   }
 
   void mostrarSnackbar(String mensaje) {
