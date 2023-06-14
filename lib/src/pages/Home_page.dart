@@ -1,115 +1,72 @@
 import 'package:flutter/material.dart';
-import 'package:justificaciones/src/pages/Login_page.dart';
-import 'package:justificaciones/src/pages/alumnos_page.dart';
-import 'package:justificaciones/src/pages/buscador_page.dart';
-import 'package:justificaciones/src/pages/docentes_page.dart';
-import 'package:justificaciones/src/pages/justifRegistro_page.dart';
+import 'package:justificaciones/src/bloc/provider.dart';
+import 'package:justificaciones/src/models/producto_model.dart';
+import 'package:justificaciones/widgets/menu_widget.dart';
 
-class MyHomePage extends StatefulWidget {
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  bool _isDrawerExpanded = false;
-
-  String _nombre = 'Usuario';
-
+class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final productosBloc = Provider.productosBloc(context);
+    productosBloc.cargarProductos();
+
     return Scaffold(
+      drawer: Menu(),
       appBar: AppBar(
+        title: Text('Alumnos'),
         backgroundColor: Color.fromRGBO(128, 0, 0, 1.0),
-        actions: [
-          CircleAvatar(
-            backgroundImage: NetworkImage(
-                'https://png.pngtree.com/png-vector/20191009/ourmid/pngtree-user-icon-png-image_1796659.jpg'),
-          ),
-        ],
-        title: Text('Bienvenido ${_nombre}'),
       ),
-      body: Container(),
-      drawer: Drawer(
-        child: ListView(
-          children: <Widget>[
-            DrawerHeader(
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Color.fromRGBO(128, 0, 0, 1.0),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 0,
-                    right: 0,
-                    top: -18,
-                    bottom: 0,
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: CircleAvatar(
-                        radius: 60,
-                        backgroundImage: AssetImage('assets/LogoCBTIS.jpg'),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              decoration: BoxDecoration(
-                color: Color.fromRGBO(128, 0, 0, 1.0),
-              ),
-            ),
-            ListTile(
-              leading: Icon(Icons.search, color: Colors.black),
-              title: Text('Busqueda'),
-              onTap: () {
-                setState(() {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => SearchPage()));
-                });
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.assignment, color: Colors.black),
-              title: Text('Registro maestros'),
-              onTap: () {
-                setState(() {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => RegistroPage()));
-                });
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.assignment_ind, color: Colors.black),
-              title: Text(' Registro alumnos'),
-              onTap: () {
-                setState(() {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => RegistroAlumnoPage()));
-                });
-              },
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.assignment_add,
-                color: Colors.black,
-              ),
-              title: Text('Registro justificacion'),
-              onTap: () {
-                setState(() {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => MyHomePage2()));
-                });
-              },
-            ),
-          ],
+      body: _crearListado(productosBloc),
+      floatingActionButton: _crearBoton(context),
+    );
+  }
+
+  Widget _crearListado(ProductosBloc productosBloc) {
+    return StreamBuilder(
+      stream: productosBloc.productosStream,
+      builder:
+          (BuildContext context, AsyncSnapshot<List<ProductoModel>> snapshot) {
+        if (snapshot.hasData) {
+          final productos = snapshot.data;
+
+          return ListView.builder(
+              itemCount: productos.length,
+              itemBuilder: (context, i) =>
+                  _crearItem(context, productosBloc, productos[i]));
+        } else {
+          return Center(child: CircularProgressIndicator());
+        }
+      },
+    );
+  }
+
+  Widget _crearItem(BuildContext context, ProductosBloc productosBloc,
+      ProductoModel producto) {
+    return Dismissible(
+        key: UniqueKey(),
+        background: Container(
+          color: Colors.red,
         ),
-      ),
+        onDismissed: (dirreccion) => productosBloc.borrarProducto(producto.id),
+        child: Card(
+          child: Column(
+            children: <Widget>[
+              ListTile(
+                title: Text(
+                    '${producto.nombre} - ${producto.aula} - ${producto.semestre} - ${producto.carrera} - ${producto.numcontrol} - ${producto.grupo}'),
+                subtitle: Text(producto.id),
+                onTap: () => Navigator.pushNamed(context, 'producto',
+                    arguments: producto),
+              ),
+            ],
+          ),
+        ));
+  }
+
+  _crearBoton(BuildContext context) {
+    return FloatingActionButton(
+      child: Icon(Icons.add),
+      backgroundColor: Color.fromRGBO(128, 0, 0, 1.0),
+      onPressed: () => Navigator.pushNamed(context, 'producto'),
     );
   }
 }

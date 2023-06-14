@@ -1,21 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:justificaciones/src/pages/Home_page.dart';
-import 'package:justificaciones/src/pages/Login_page.dart';
 
-void main() {
-  runApp(LoginApp());
+import 'package:justificaciones/src/bloc/provider.dart';
+import 'package:justificaciones/src/pages/home.dart';
+
+import 'package:justificaciones/src/pages/home_page.dart';
+import 'package:justificaciones/src/pages/login_page.dart';
+import 'package:justificaciones/src/pages/producto_page.dart';
+import 'package:justificaciones/src/pages/registro_page.dart';
+import 'package:justificaciones/src/preferencias_usuario/preferencias_usuario.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final prefs = new PreferenciasUsuario();
+  await prefs.initPrefs();
+
+  runApp(MyApp());
 }
 
-class LoginApp extends StatelessWidget {
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Login App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    final prefs = new PreferenciasUsuario();
+    print(prefs.token);
+
+    return Provider(
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Material App',
+        initialRoute: 'login',
+        routes: {
+          'login': (BuildContext context) => LoginPage(),
+          'registro': (BuildContext context) => Register(),
+          'principal': (BuildContext context) => Home(),
+          'home': (BuildContext context) => HomePage(),
+          'producto': (BuildContext context) => ProductoPage(),
+        },
+        theme: ThemeData(
+          primaryColor: Color.fromRGBO(128, 0, 0, 1.0),
+        ),
       ),
-      home: LoginPage(),
     );
   }
 }

@@ -2,39 +2,38 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:justificaciones/src/pages/home.dart';
 import 'package:http/http.dart' as http;
+import 'package:justificaciones/src/pages/home.dart';
 
-
-class LoginPage extends StatefulWidget {
+class Register extends StatefulWidget {
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  _RegisterState createState() => _RegisterState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterState extends State<Register> {
+  TextEditingController user = TextEditingController();
+  TextEditingController pass = TextEditingController();
 
-  TextEditingController controllerUser = new TextEditingController();
-  TextEditingController controllerPass = new TextEditingController();
-
-  Future login() async {
-    var url = "http://192.168.101.9/justificaciones/login.php";
-    final response = await http.post(url, body: {
-      "username": controllerUser.text,
-      "password": controllerPass.text,
+  Future register() async {
+    var url = "http://192.168.101.9/justificaciones/register.php";
+    var response = await http.post(url, body: {
+      "username": user.text,
+      "password": pass.text,
     });
-    final data = json.decode(response.body);
-    if (data == "Success") {
+    var data = json.decode(response.body);
+    if (data == "Error") {
       Fluttertoast.showToast(
-          msg: 'Login exitoso',
+          msg: 'Usuario ya existe',
           fontSize: 10, 
-          textColor: Colors.green,
+          textColor: Colors.red,
       );
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>Home(),),);
     } else {
       Fluttertoast.showToast(
-          msg: 'Username y password inválidos',
+          msg: 'Registro',
           fontSize: 10, 
-          textColor: Colors.red);
+          textColor: Colors.green);
+          
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>Home(),),);
     }
   }
 
@@ -77,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
                 ]),
             child: Column(
               children: <Widget>[
-                Text('Ingreso', style: TextStyle(fontSize: 20.0)),
+                Text('Crear cuenta', style: TextStyle(fontSize: 20.0)),
                 SizedBox(height: 60.0),
                 _crearEmail(),
                 SizedBox(height: 30.0),
@@ -88,9 +87,9 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
           TextButton(
-            child: Text('Crear una nueva cuenta'),
+            child: Text('¿Ya tienes cuenta? Login'),
             onPressed: () =>
-                Navigator.pushReplacementNamed(context, 'registro'),
+                Navigator.pushReplacementNamed(context, 'login'),
           ),
           SizedBox(height: 100.0)
         ],
@@ -111,7 +110,7 @@ class _LoginPageState extends State<LoginPage> {
                   hintText: 'ejemplo@correo.com',
                   labelText: 'Correo electrónico',
               ),
-              controller: controllerUser,
+              controller: user,
             ),
           );
         });
@@ -130,7 +129,7 @@ class _LoginPageState extends State<LoginPage> {
                   labelText: 'Contraseña',
                   counterText: snapshot.data,
                 ),
-                controller: controllerPass,
+                controller: pass,
             ),
           );
         });
@@ -145,7 +144,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: Text('Ingresar'),
               ),
               onPressed: () {
-                login();
+                register();
               },
               style: ElevatedButton.styleFrom(
                   elevation: 0.0,
