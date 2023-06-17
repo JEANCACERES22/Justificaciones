@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter/material.dart';
 import 'package:justificaciones/src/pages/justifRegistro_page.dart';
-import 'package:justificaciones/widgets/menu_widget.dart';
+import 'package:justificaciones/src/widgets/menu_widget.dart';
 import 'package:selectable_list/selectable_list.dart';
 
 

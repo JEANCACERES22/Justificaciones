@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:justificaciones/src/pages/Home_page.dart';
-import 'package:justificaciones/src/pages/alumnos_home_page.dart';
 import 'package:justificaciones/src/pages/buscador_page.dart';
-import 'package:justificaciones/src/pages/docentes_home_page.dart';
+import 'package:justificaciones/src/pages/home.dart';
+import 'package:justificaciones/src/pages/home_page.dart';
 import 'package:justificaciones/src/pages/justifRegistro_page.dart';
+import 'package:justificaciones/src/pages/maestro_home_page.dart';
 
 class Menu extends StatelessWidget {
   @override
@@ -29,7 +29,7 @@ class Menu extends StatelessWidget {
             title: Text('Home'), textColor: Colors.black,
             onTap: () =>
               Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (context) => HomePage(),
+                  builder: (context) => Home(),
               )),
           ),
           ListTile(
@@ -37,7 +37,7 @@ class Menu extends StatelessWidget {
             title: Text('Agregar Alumnos'), textColor: Colors.black,
             onTap: () =>
               Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (context) => AlumnosHomePage(),
+                  builder: (context) => HomePage(),
               )),
           ),
           ListTile(
@@ -45,7 +45,7 @@ class Menu extends StatelessWidget {
             title: Text('Agregar Docentes'), textColor: Colors.black,
             onTap: () =>
               Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (context) => DocentesHomePage(),
+                  builder: (context) => MaestrosHomePage(),
               )),
           ),
           ListTile(
@@ -53,7 +53,7 @@ class Menu extends StatelessWidget {
             title: Text('Agregar Justificación'), textColor: Colors.black,
             onTap: () =>
               Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (context) => JustificacionesPage(),
+                  builder: (context) => JustificacionesHomePage(),
               )),
           ),
           ListTile(

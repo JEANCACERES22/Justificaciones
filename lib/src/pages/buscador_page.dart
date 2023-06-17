@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:justificaciones/widgets/menu_widget.dart';
+import 'package:justificaciones/src/widgets/menu_widget.dart';
 
 class SearchPage extends StatefulWidget {
   @override

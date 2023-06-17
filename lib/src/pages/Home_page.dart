@@ -1,13 +1,24 @@
-import 'package:flutter/material.dart';
-import 'package:justificaciones/src/bloc/provider.dart';
-import 'package:justificaciones/src/models/producto_model.dart';
-import 'package:justificaciones/widgets/menu_widget.dart';
+import 'dart:convert';
 
-class HomePage extends StatelessWidget {
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:justificaciones/src/pages/detalles.dart';
+import 'package:justificaciones/src/widgets/menu_widget.dart';
+
+class HomePage extends StatefulWidget {
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+
+  Future<List> getData() async {
+    final response = await http.get("http://192.168.101.9/justificaciones/listado_alumnos.php");
+    return json.decode(response.body);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final productosBloc = Provider.productosBloc(context);
-    productosBloc.cargarProductos();
 
     return Scaffold(
       drawer: Menu(),
@@ -15,58 +26,76 @@ class HomePage extends StatelessWidget {
         title: Text('Alumnos'),
         backgroundColor: Color.fromRGBO(128, 0, 0, 1.0),
       ),
-      body: _crearListado(productosBloc),
+      body: _crearListado(),
       floatingActionButton: _crearBoton(context),
     );
   }
 
-  Widget _crearListado(ProductosBloc productosBloc) {
-    return StreamBuilder(
-      stream: productosBloc.productosStream,
-      builder:
-          (BuildContext context, AsyncSnapshot<List<ProductoModel>> snapshot) {
-        if (snapshot.hasData) {
-          final productos = snapshot.data;
-
-          return ListView.builder(
-              itemCount: productos.length,
-              itemBuilder: (context, i) =>
-                  _crearItem(context, productosBloc, productos[i]));
-        } else {
-          return Center(child: CircularProgressIndicator());
-        }
-      },
-    );
-  }
-
-  Widget _crearItem(BuildContext context, ProductosBloc productosBloc,
-      ProductoModel producto) {
-    return Dismissible(
-        key: UniqueKey(),
-        background: Container(
-          color: Colors.red,
-        ),
-        onDismissed: (dirreccion) => productosBloc.borrarProducto(producto.id),
-        child: Card(
-          child: Column(
-            children: <Widget>[
-              ListTile(
-                title: Text(
-                    '${producto.nombre} - ${producto.aula} - ${producto.semestre} - ${producto.carrera} - ${producto.numcontrol} - ${producto.grupo}'),
-                subtitle: Text(producto.id),
-                onTap: () => Navigator.pushNamed(context, 'producto',
-                    arguments: producto),
-              ),
-            ],
-          ),
-        ));
+  Widget _crearListado() {
+    return FutureBuilder<List>(
+        future: getData(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) print(snapshot.error);
+          return snapshot.hasData
+              ? new ItemList(
+                  list: snapshot.data,
+                )
+              : new Center(
+                  child: new CircularProgressIndicator(),
+                );
+        },
+      );
   }
 
   _crearBoton(BuildContext context) {
     return FloatingActionButton(
       child: Icon(Icons.add),
       backgroundColor: Color.fromRGBO(128, 0, 0, 1.0),
-      onPressed: () => Navigator.pushNamed(context, 'producto'),
+      onPressed: () => Navigator.pushNamed(context, 'alumno'),
     );
   }
 }
+
+class ItemList extends StatelessWidget {
+  final List list;
+  ItemList({this.list});
+
+  @override
+  Widget build(BuildContext context) {
+    return new ListView.builder(
+      itemCount: list == null ? 0 : list.length,
+      itemBuilder: (context, i) {
+        return new Container(
+          padding: const EdgeInsets.all(10.0),
+          child: new GestureDetector(
+            onTap: () => Navigator.of(context).push(
+                  new MaterialPageRoute(
+                      builder: (BuildContext context) => new Detalles(
+                            list: list,
+                            index: i,
+                          )),
+                ),
+            child: new Card(
+              child: new ListTile(
+                title: new Text(
+                  list[i]['nom_alum'],
+                  style: TextStyle(fontSize: 20.0, color: Color.fromRGBO(128, 0, 0, 1.0)),
+                ),
+                leading: new Icon(
+                  Icons.person_pin,
+                  size: 45.0,
+                  color: Color.fromRGBO(128, 0, 0, 1.0),
+                ),
+                subtitle: new Text(
+                  "Carrera : ${list[i]['carrera']}",
+                  style: TextStyle(fontSize: 15.0, color: Colors.black),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
