@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:justificaciones/src/pages/maestro_page.dart';
-import 'package:justificaciones/widgets/menu_widget.dart';
+import 'package:justificaciones/src/widgets/menu_widget.dart';
 
 
 class MaestrosHomePage extends StatelessWidget {

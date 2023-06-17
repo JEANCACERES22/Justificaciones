@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:justificaciones/src/pages/justificacion_page.dart';
-import 'package:justificaciones/widgets/menu_widget.dart';
+import 'package:justificaciones/src/widgets/menu_widget.dart';
 
 class JustificacionesHomePage extends StatefulWidget {
   @override
