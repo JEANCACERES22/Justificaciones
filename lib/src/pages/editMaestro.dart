@@ -3,53 +3,67 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-import 'package:justificaciones/src/pages/maestro_home_page.dart';
-import 'package:justificaciones/src/widgets/menu_widget.dart';
+import 'package:justificaciones/src/pages/Home_page.dart';
 
-class DocentePage extends StatefulWidget {
+
+class EditarMaestro extends StatefulWidget {
+  final List list;
+  final int index;
+
+  EditarMaestro({this.list, this.index});
+
   @override
-  _DocentePageState createState() => _DocentePageState();
+  _EditarMaestroState createState() => new _EditarMaestroState();
 }
 
-class _DocentePageState extends State<DocentePage> {
-  TextEditingController nom_mtro = new TextEditingController();
-  TextEditingController asignatura = new TextEditingController();
-  TextEditingController contacto = new TextEditingController();
+class _EditarMaestroState extends State<EditarMaestro> {
 
-  String turno = "Matutino";
+  TextEditingController nom_mtro ;
+  TextEditingController asignatura ;
+  TextEditingController contacto ;
 
-  Future register() async {
-    var url = "http://192.168.101.9/justificaciones/registrar_maestros.php";
-    final response = await http.post(url, body: {
+  String turno = 'Matutino';
+  
+
+
+  void editar() {
+    var url="http://192.168.101.9/justificaciones/editar_alumnos.php";
+    http.post(url,body: {
+      "id": widget.list[widget.index]['id'],
       "nom_mtro": nom_mtro.text,
       "asigturas" : asignatura.text,
       "contacto" : contacto.text,
       "turno" : turno,
-      //"grupos": grupo
     });
-    final data = json.decode(response.body);
+    var response;
+    var data = json.decode(response.body);
     if (data == "Error") {
       Fluttertoast.showToast(
-          msg: 'Maestro ya existe',
+          msg: 'Error',
           fontSize: 10, 
           textColor: Colors.red,
       );
     } else {
-      Fluttertoast.showToast(
-          msg: 'Maestro registrado',
-          fontSize: 10, 
-          textColor: Colors.green);
           
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>MaestrosHomePage()));
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
     }
   }
 
+
+  @override
+    void initState() {
+      nom_mtro = new TextEditingController(text: widget.list[widget.index]['nom_mtr'] );
+      asignatura = new TextEditingController(text: widget.list[widget.index]['asignatura'] );
+      contacto = new TextEditingController(text: widget.list[widget.index]['contacto'] );
+      turno = turno;
+      super.initState();
+    }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: Menu(),
-      appBar: AppBar(
-        title: Text('Registrar Maestros'),
+    return new Scaffold(
+      appBar: new AppBar(
+        title: new Text("EDITAR"),
         backgroundColor: Color.fromRGBO(128, 0, 0, 1.0),
       ),
       body: SingleChildScrollView(
@@ -57,8 +71,8 @@ class _DocentePageState extends State<DocentePage> {
           padding: EdgeInsets.all(15.0),
           child: Form(
               child: Column(
-            children: <Widget>[
-              _crearNombre(),
+                children: <Widget>[
+                  _crearNombre(),
               _crearAsignatura(),
               _crearContacto(),
               _crearTurno(),
@@ -140,7 +154,7 @@ class _DocentePageState extends State<DocentePage> {
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20.0))),
       onPressed: () {
-        register();
+        editar();
       },
     );
   }

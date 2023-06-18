@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:justificaciones/src/pages/Home_page.dart';
 import 'package:justificaciones/src/pages/editdata.dart';
+import 'package:justificaciones/src/pages/maestro_home_page.dart';
 
 
-class Detalles extends StatefulWidget {
+class DetallesMestros extends StatefulWidget {
   List list;
   int index;
-  Detalles({this.index,this.list});
+  DetallesMestros({this.index,this.list});
   @override
-  _DetallesState createState() => new _DetallesState();
+  _DetallesMestrosState createState() => new _DetallesMestrosState();
 }
 
-class _DetallesState extends State<Detalles> {
+class _DetallesMestrosState extends State<DetallesMestros> {
 
 void deleteData(){
-  var url="http://192.168.101.9/justificaciones/eliminar_alumnos.php";
+  var url="http://192.168.101.9/justificaciones/eliminar_maestros.php";
   http.post(url, body: {
     'id': widget.list[widget.index]['id']
   });
@@ -23,7 +23,7 @@ void deleteData(){
 
 void confirm (){
   AlertDialog alertDialog = new AlertDialog(
-    content: new Text("Esta seguto de eliminar '${widget.list[widget.index]['nombre']}'"),
+    content: new Text("Esta seguto de eliminar '${widget.list[widget.index]['nom_mtro']}'"),
     actions: <Widget>[
       new ElevatedButton(
         child: new Text("OK Eliminado!",style: new TextStyle(color: Colors.black)),
@@ -34,7 +34,7 @@ void confirm (){
           deleteData();
           Navigator.of(context).push(
             new MaterialPageRoute(
-              builder: (BuildContext context)=> new HomePage(),
+              builder: (BuildContext context)=> new MaestrosHomePage(),
             )
           );
         },
@@ -55,7 +55,7 @@ void confirm (){
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: new AppBar(title: new Text("${widget.list[widget.index]['nombre']}"),backgroundColor: Color.fromRGBO(128, 0, 0, 1.0)),
+      appBar: new AppBar(title: new Text("${widget.list[widget.index]['nom_mtro']}"),backgroundColor: Color.fromRGBO(128, 0, 0, 1.0)),
       body: new Container(
         height: 270.0, 
         padding: const EdgeInsets.all(20.0),
@@ -65,7 +65,7 @@ void confirm (){
               children: <Widget>[
 
                 new Padding(padding: const EdgeInsets.only(top: 30.0),),
-                new Text(widget.list[widget.index]['nombre'], style: new TextStyle(fontSize: 20.0),),
+                new Text(widget.list[widget.index]['nom_mtro'], style: new TextStyle(fontSize: 20.0),),
                 Divider(),
 
                 new Row(

@@ -6,6 +6,8 @@ import 'package:justificaciones/src/pages/home.dart';
 
 import 'package:justificaciones/src/pages/home_page.dart';
 import 'package:justificaciones/src/pages/login_page.dart';
+import 'package:justificaciones/src/pages/maestro_home_page.dart';
+import 'package:justificaciones/src/pages/maestro_page.dart';
 import 'package:justificaciones/src/pages/registro_page.dart';
 import 'package:justificaciones/src/preferencias_usuario/preferencias_usuario.dart';
 
@@ -37,6 +39,8 @@ class MyApp extends StatelessWidget {
           'principal': (BuildContext context) => Home(),
           'home': (BuildContext context) => HomePage(),
           'alumno': (BuildContext context) => AlumnoPage(),
+          'home_maestro': (BuildContext context) => MaestrosHomePage(),
+          'maestro' : (BuildContext context) => DocentePage(),
         },
         theme: ThemeData(
           primaryColor: Color.fromRGBO(128, 0, 0, 1.0),

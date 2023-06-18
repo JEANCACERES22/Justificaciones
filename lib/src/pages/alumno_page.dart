@@ -13,8 +13,8 @@ class AlumnoPage extends StatefulWidget {
 
 class _AlumnoPageState extends State<AlumnoPage> {
 
-  TextEditingController num_control = new TextEditingController();
-  TextEditingController nom_alum = new TextEditingController();
+  TextEditingController no_control = new TextEditingController();
+  TextEditingController nombre = new TextEditingController();
   TextEditingController aula = new TextEditingController();
   TextEditingController grupo = new TextEditingController();
   TextEditingController semestre = new TextEditingController();
@@ -25,13 +25,13 @@ class _AlumnoPageState extends State<AlumnoPage> {
   Future register() async {
     var url = "http://192.168.101.9/justificaciones/registrar_alumnos.php";
     final response = await http.post(url, body: {
-      "num_control": num_control.text,
-      "nom_alum": nom_alum.text,
+      "no_control": no_control.text,
+      "nombre": nombre.text,
       "aula" : aula.text,
       "grupo" : grupo.text,
-      "turno" : turno,
       "semestre" : semestre.text,
-      "carrera": carrera.text
+      "carrera": carrera.text,
+      "turno" : turno,
     });
     final data = json.decode(response.body);
     if (data == "Error") {
@@ -83,7 +83,7 @@ class _AlumnoPageState extends State<AlumnoPage> {
     return TextFormField(
       textCapitalization: TextCapitalization.sentences,
       decoration: InputDecoration(labelText: 'Nombre'),
-      controller: nom_alum
+      controller: nombre
     );
   }
 
@@ -99,7 +99,7 @@ class _AlumnoPageState extends State<AlumnoPage> {
     return TextFormField(
       keyboardType: TextInputType.numberWithOptions(),
       decoration: InputDecoration(labelText: 'Numero de control'),
-      controller: num_control
+      controller: no_control
     );
   }
 
