@@ -5,7 +5,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:justificaciones/src/pages/Home_page.dart';
 
-
 class EditarMaestro extends StatefulWidget {
   final List list;
   final int index;
@@ -17,47 +16,46 @@ class EditarMaestro extends StatefulWidget {
 }
 
 class _EditarMaestroState extends State<EditarMaestro> {
-
-  TextEditingController nom_mtro ;
-  TextEditingController asignatura ;
-  TextEditingController contacto ;
+  TextEditingController nom_mtro;
+  TextEditingController asignatura;
+  TextEditingController contacto;
 
   String turno = 'Matutino';
-  
-
 
   void editar() {
-    var url="http://192.168.101.9/justificaciones/editar_alumnos.php";
-    http.post(url,body: {
+    var url = "http://192.168.101.9/justificaciones/editar_alumnos.php";
+    http.post(url, body: {
       "id": widget.list[widget.index]['id'],
       "nom_mtro": nom_mtro.text,
-      "asigturas" : asignatura.text,
-      "contacto" : contacto.text,
-      "turno" : turno,
+      "asigturas": asignatura.text,
+      "contacto": contacto.text,
+      "turno": turno,
     });
     var response;
     var data = json.decode(response.body);
     if (data == "Error") {
       Fluttertoast.showToast(
-          msg: 'Error',
-          fontSize: 10, 
-          textColor: Colors.red,
+        msg: 'Error',
+        fontSize: 10,
+        textColor: Colors.red,
       );
     } else {
-          
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => HomePage()));
     }
   }
 
-
   @override
-    void initState() {
-      nom_mtro = new TextEditingController(text: widget.list[widget.index]['nom_mtr'] );
-      asignatura = new TextEditingController(text: widget.list[widget.index]['asignatura'] );
-      contacto = new TextEditingController(text: widget.list[widget.index]['contacto'] );
-      turno = turno;
-      super.initState();
-    }
+  void initState() {
+    nom_mtro =
+        new TextEditingController(text: widget.list[widget.index]['nom_mtr']);
+    asignatura = new TextEditingController(
+        text: widget.list[widget.index]['asignatura']);
+    contacto =
+        new TextEditingController(text: widget.list[widget.index]['contacto']);
+    turno = turno;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,8 +69,8 @@ class _EditarMaestroState extends State<EditarMaestro> {
           padding: EdgeInsets.all(15.0),
           child: Form(
               child: Column(
-                children: <Widget>[
-                  _crearNombre(),
+            children: <Widget>[
+              _crearNombre(),
               _crearAsignatura(),
               _crearContacto(),
               _crearTurno(),

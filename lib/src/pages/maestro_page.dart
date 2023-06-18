@@ -22,25 +22,24 @@ class _DocentePageState extends State<DocentePage> {
     var url = "http://192.168.101.9/justificaciones/registrar_maestros.php";
     final response = await http.post(url, body: {
       "nom_mtro": nom_mtro.text,
-      "asigturas" : asignatura.text,
-      "contacto" : contacto.text,
-      "turno" : turno,
+      "asigturas": asignatura.text,
+      "contacto": contacto.text,
+      "turno": turno,
       //"grupos": grupo
     });
     final data = json.decode(response.body);
     if (data == "Error") {
       Fluttertoast.showToast(
-          msg: 'Maestro ya existe',
-          fontSize: 10, 
-          textColor: Colors.red,
+        msg: 'Maestro ya existe',
+        fontSize: 10,
+        textColor: Colors.red,
       );
     } else {
       Fluttertoast.showToast(
-          msg: 'Maestro registrado',
-          fontSize: 10, 
-          textColor: Colors.green);
-          
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>MaestrosHomePage()));
+          msg: 'Maestro registrado', fontSize: 10, textColor: Colors.green);
+
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => MaestrosHomePage()));
     }
   }
 

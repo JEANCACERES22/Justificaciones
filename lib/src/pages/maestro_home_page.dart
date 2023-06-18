@@ -5,22 +5,20 @@ import 'package:http/http.dart' as http;
 import 'package:justificaciones/src/pages/detalles_maestros.dart';
 import 'package:justificaciones/src/widgets/menu_widget.dart';
 
-
 class MaestrosHomePage extends StatefulWidget {
-
   @override
   State<MaestrosHomePage> createState() => _MaestrosHomePageState();
 }
 
 class _MaestrosHomePageState extends State<MaestrosHomePage> {
-   Future<List> getData() async {
-     final response = await http.get("http://192.168.101.9/justificaciones/listado_maestros.php");
-     return json.decode(response.body);
+  Future<List> getData() async {
+    final response = await http
+        .get("http://192.168.101.9/justificaciones/listado_maestros.php");
+    return json.decode(response.body);
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       drawer: Menu(),
       appBar: AppBar(
@@ -34,18 +32,18 @@ class _MaestrosHomePageState extends State<MaestrosHomePage> {
 
   Widget _crearListado() {
     return FutureBuilder<List>(
-        future: getData(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) print(snapshot.error);
-          return snapshot.hasData
-              ? new ItemList(
-                  list: snapshot.data,
-                )
-              : new Center(
-                  child: new CircularProgressIndicator(),
-                );
-        },
-      );
+      future: getData(),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) print(snapshot.error);
+        return snapshot.hasData
+            ? new ItemList(
+                list: snapshot.data,
+              )
+            : new Center(
+                child: new CircularProgressIndicator(),
+              );
+      },
+    );
   }
 
   _crearBoton(BuildContext context) {
@@ -70,17 +68,18 @@ class ItemList extends StatelessWidget {
           padding: const EdgeInsets.all(10.0),
           child: new GestureDetector(
             onTap: () => Navigator.of(context).push(
-                  new MaterialPageRoute(
-                      builder: (BuildContext context) => new DetallesMestros(
-                            list: list,
-                            index: i,
-                          )),
-                ),
+              new MaterialPageRoute(
+                  builder: (BuildContext context) => new DetallesMestros(
+                        list: list,
+                        index: i,
+                      )),
+            ),
             child: new Card(
               child: new ListTile(
                 title: new Text(
                   list[i]['nom_mtro'],
-                  style: TextStyle(fontSize: 20.0, color: Color.fromRGBO(128, 0, 0, 1.0)),
+                  style: TextStyle(
+                      fontSize: 20.0, color: Color.fromRGBO(128, 0, 0, 1.0)),
                 ),
                 leading: new Icon(
                   Icons.person_pin,
@@ -99,4 +98,3 @@ class ItemList extends StatelessWidget {
     );
   }
 }
-
