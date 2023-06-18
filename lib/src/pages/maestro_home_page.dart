@@ -14,8 +14,8 @@ class MaestrosHomePage extends StatefulWidget {
 
 class _MaestrosHomePageState extends State<MaestrosHomePage> {
    Future<List> getData() async {
-    final response = await http.get("http://192.168.101.9/justificaciones/listado_maestros.php");
-    return json.decode(response.body);
+     final response = await http.get("http://192.168.101.9/justificaciones/listado_maestros.php");
+     return json.decode(response.body);
   }
 
   @override
