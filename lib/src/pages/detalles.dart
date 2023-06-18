@@ -23,7 +23,7 @@ void deleteData(){
 
 void confirm (){
   AlertDialog alertDialog = new AlertDialog(
-    content: new Text("Esta seguto de eliminar '${widget.list[widget.index]['nom_alum']}'"),
+    content: new Text("Esta seguto de eliminar '${widget.list[widget.index]['nombre']}'"),
     actions: <Widget>[
       new ElevatedButton(
         child: new Text("OK Eliminado!",style: new TextStyle(color: Colors.black)),
@@ -55,7 +55,7 @@ void confirm (){
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: new AppBar(title: new Text("${widget.list[widget.index]['nom_alum']}"),backgroundColor: Color.fromRGBO(128, 0, 0, 1.0)),
+      appBar: new AppBar(title: new Text("${widget.list[widget.index]['nombre']}"),backgroundColor: Color.fromRGBO(128, 0, 0, 1.0)),
       body: new Container(
         height: 270.0, 
         padding: const EdgeInsets.all(20.0),
@@ -65,7 +65,7 @@ void confirm (){
               children: <Widget>[
 
                 new Padding(padding: const EdgeInsets.only(top: 30.0),),
-                new Text(widget.list[widget.index]['nom_alum'], style: new TextStyle(fontSize: 20.0),),
+                new Text(widget.list[widget.index]['nombre'], style: new TextStyle(fontSize: 20.0),),
                 Divider(),
 
                 new Row(

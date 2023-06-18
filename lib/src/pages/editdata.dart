@@ -33,8 +33,8 @@ class _EditarAlumnoState extends State<EditarAlumno> {
     var url="http://192.168.101.9/justificaciones/editar_alumnos.php";
     http.post(url,body: {
       "id": widget.list[widget.index]['id'],
-      "num_control": num_control.text,
-      "nom_alum": nom_alum.text,
+      "no_control": num_control.text,
+      "nombre": nom_alum.text,
       "aula" : aula.text,
       "grupo" : grupo.text,
       "turno": turno,
@@ -58,8 +58,8 @@ class _EditarAlumnoState extends State<EditarAlumno> {
 
   @override
     void initState() {
-      num_control = new TextEditingController(text: widget.list[widget.index]['num_control'] );
-      nom_alum = new TextEditingController(text: widget.list[widget.index]['nom_alum'] );
+      num_control = new TextEditingController(text: widget.list[widget.index]['no_control'] );
+      nom_alum = new TextEditingController(text: widget.list[widget.index]['nombre'] );
       aula = new TextEditingController(text: widget.list[widget.index]['aula'] );
       grupo = new TextEditingController(text: widget.list[widget.index]['grupo'] );
       turno = turno;
